@@ -1,3 +1,4 @@
+
   // Initialize Firebase
   var config = {
     apiKey: "AIzaSyBwAkQcQYM-sXsBY9L4Fe1EsVVGPEHAY_U",
@@ -48,9 +49,8 @@ function initMap() {
   google.maps.event.addListener(map, 'click', function(event) {
     placeMarker(map, event.latLng);
   });
-}
 
-function placeMarker(map, location) {
+  function placeMarker(map, location) {
   var marker = new google.maps.Marker({
     position: location,
     map: map
@@ -60,5 +60,57 @@ function placeMarker(map, location) {
   });
   infowindow.open(map,marker);
 }
+
+// gets a list of all breweries in a given zipcode
+function findByZipcode(zipcode) {
+  var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
+  var locations = []
+  axios.get(url, {
+    baseURL: 'http://api.brewerydb.com/v2/',
+    params : {
+      postalCode: zipcode
+    }
+  })
+    .then(function (res) {
+      var data = res.data.data
+      data.forEach(function (brewery) {
+        locations.push({
+          name: brewery.brewery.name,
+          lat: brewery.latitude,
+          lon: brewery.longitude
+        })
+      })
+    })
+    .catch(function (err) {
+      console.log(err)
+    })
+  return locations
+}
+
+// gets a lost of all breweries based on the pased in city and state
+function findByCity(city, state) {
+  var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
+  var locations = []
+  axios.get(url, {
+    baseURL: 'http://api.brewerydb.com/v2/',
+    params : {
+      locality: city,
+      region: state
+    }
+  })
+    .then(function (res) {
+      var data = res.data.data
+      data.forEach(function (brewery) {
+        locations.push({
+          name: brewery.brewery.name,
+          lat: brewery.latitude,
+          lon: brewery.longitude
+        })
+      })
+    })
+  return locations
+}
+
+
 
  
