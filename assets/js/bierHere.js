@@ -28,6 +28,15 @@ $("#add-search").on("click", function() {
 var locLat = 41.34;
 var locLng = -80.12;
 
+var locArray = [];
+locArray.push([41.34, -80.12]);
+locArray.push([41.0, -81.2]);
+console.log(locArray);
+console.log(locArray[0][0]);
+console.log(locArray[0][1]);
+console.log(locArray[1][0]);
+console.log(locArray[1][1]);
+
 function initMap() {
 // Create a map object and specify the DOM element for display.
 //the Latitude and longitude for myCenter should be coppresponding to the zip code used entered
@@ -46,9 +55,17 @@ function initMap() {
   var marker = new google.maps.Marker({position:mapOptions.center});
   var map = new google.maps.Map(mapBier, mapOptions);
   marker.setMap(map);
+<<<<<<< Updated upstream
   google.maps.event.addListener(map, 'click', function(event) {
     placeMarker(map, event.latLng);
   });
+=======
+
+//  google.maps.event.addListener(map, 'click', function(event) {
+//    placeMarker(map, event.latLng);
+//  });
+}
+>>>>>>> Stashed changes
 
   function placeMarker(map, location) {
   var marker = new google.maps.Marker({
