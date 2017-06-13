@@ -1,6 +1,4 @@
-
-
-  // Initialize Firebase
+// Initialize Firebase
   var config = {
     apiKey: "AIzaSyBwAkQcQYM-sXsBY9L4Fe1EsVVGPEHAY_U",
     authDomain: "bierhere-27b59.firebaseapp.com",
@@ -39,7 +37,7 @@ console.log(locArray);
 //console.log(locArray[1][0]);
 //console.log(locArray[1][1]);
 
-// var locs = findByZipcode(44113);
+var locs = findByZipcode(44113);
 
 //console.log(locs[0].lat);
 //console.log(locs[0].lon);
@@ -58,8 +56,6 @@ var markers = [
 console.log(markers);
 
 function initMap() {
-
-
     var map;
     var bounds = new google.maps.LatLngBounds();
     var mapOptions = {
@@ -106,60 +102,49 @@ function initMap() {
         map.fitBounds(bounds);
     }
 
-
-//  google.maps.event.addListener(map, 'click', function(event) {
-//    placeMarker(map, event.latLng);
-//  });
-
+    // Override our map zoom level once our fitBounds function runs (Make sure it only runs once)
+    var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
+        this.setZoom(14);
+        google.maps.event.removeListener(boundsListener);
+    });
+    
 }
 
-
-
-
-// gets a list of all breweries in a given city
-// ex. findByCity('New York', 'New York')
-// Abbreviated state name sometimes works, but not always so avoid it.
-// ex. findByCity('New York', 'NY') -> no
-// ex findByCity('Kansas City', 'MO') -> yes
-var findByCity = queryAPIBy.bind(undefined, 'city')
-
-
-// gets a list of all breweries in a given zipcode
-// ex. findByZipcode(64108)
-var findByZipcode = queryAPIBy.bind(undefined, 'zip')
-
-// please don't use this directly!!!
-function queryAPIBy(type, options) {
-
-     var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
-
-  // if queried by  zipcode, we get the second thing from the
-  // argument array (type is the first) and set params specifically for
-  // that params is used later in the axios get request
-  if (type === 'zip') {
-    var zipcode = arguments[1]
-    var params = {
+function findByZipcode(zipcode) {
+  var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
+  var locations = []
+  axios.get(url, {
+    baseURL: 'http://api.brewerydb.com/v2/',
+    params : {
       postalCode: zipcode
     }
-  }
+  })
+    .then(function (res) {
+      var data = res.data.data
+      data.forEach(function (brewery) {
+        locations.push({
+          name: brewery.brewery.name,
+          lat: brewery.latitude,
+          lon: brewery.longitude
+        })
+      })
+    })
+    .catch(function (err) {
+      console.log(err)
+    })
+  return locations
+}
 
-  // if queried by city, we get the second and third thing from the
-  // argument array (type is the first),
-  if (type === 'city') {
-    var city = arguments[1]
-    var state = arguments[2]
-    var params = {
+// gets a lost of all breweries based on the pased in city and state
+function findByCity(city, state) {
+  var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
+  var locations = []
+  axios.get(url, {
+    baseURL: 'http://api.brewerydb.com/v2/',
+    params : {
       locality: city,
       region: state
     }
-  }
-
-  var locations = []
-  axios.get(url, {
-    // we use cors-anywhere here to get around same origin restriction that
-    // breweryDB has on their API
-    baseURL: 'https://cors-anywhere.herokuapp.com/http://api.brewerydb.com/v2',
-    params : params
   })
     .then(function (res) {
       var data = res.data.data
@@ -175,6 +160,8 @@ function queryAPIBy(type, options) {
 }
 
 
-//console.log(locs);
-//console.log("locs.length: " + locs.length);
 
+
+
+ console.log(locs);
+console.log("locs.length: " + locs.length);
