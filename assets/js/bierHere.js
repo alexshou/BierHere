@@ -1,6 +1,6 @@
 // Query by city: queryAPIBy({city: 'akron', state: 'ohio'})
 // query by zipcode: queryAPIBy({zip: '44113'})
-function queryAPIBy(options) {
+function queryAPIBy(options, callback) {
   var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
   var defaults = {
     zip: null,
@@ -40,8 +40,15 @@ function queryAPIBy(options) {
           lon: brewery.longitude
         })
       })
+      callback(locations)
     })
-  return locations
+}
+
+// Should be used like this: queryAPIBy({zip: 44113} , plotlocations)
+function plotLocations(locations) {
+  // do map plotting here
+  // will run after the api call finishes
+  console.log(locations)
 }
 
 function initMap() {
