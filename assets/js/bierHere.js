@@ -60,6 +60,12 @@ function initMap() {
     placeMarker(map, event.latLng);
   });
 
+
+
+//  google.maps.event.addListener(map, 'click', function(event) {
+//    placeMarker(map, event.latLng);
+//  });
+
 }
 
 
