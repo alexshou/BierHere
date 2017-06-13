@@ -52,7 +52,3 @@ function initMap() {
     zoom: 8
   });
 }
-
-function makeLocationList(apiCall, callback) {
-
-}
