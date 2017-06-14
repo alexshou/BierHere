@@ -1,3 +1,4 @@
+
 // Initialize Firebase
   var config = {
     apiKey: "AIzaSyBwAkQcQYM-sXsBY9L4Fe1EsVVGPEHAY_U",
@@ -102,24 +103,41 @@ function initMap() {
 
         // Automatically center the map fitting all markers on the screen
         map.fitBounds(bounds);
-    }
-
-    // Override our map zoom level once our fitBounds function runs (Make sure it only runs once)
-    var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
+        // Override our map zoom level once our fitBounds function runs (Make sure it only runs once)
+        var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
         this.setZoom(14);
         google.maps.event.removeListener(boundsListener);
     });
     
 }
 
-function findByZipcode(zipcode) {
+// Query by city: queryAPIBy({city: 'akron', state: 'ohio'})
+// query by zipcode: queryAPIBy({zip: '44113'})
+function queryAPIBy(options, callback) {
   var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
-  var locations = []
+  var defaults = {
+    zip: null,
+    city: null,
+    state: null,
+  }
+
+  var options = Object.assign(defaults, options)
+
+  if (options.zip) {
+    var params = {
+      postalCode: options.zip
+    }
+  }
+
+  if (options.city && options.state) {
+    var params = {
+      locality: options.city,
+      region: options.state
+    }
+
   axios.get(url, {
     baseURL: 'http://api.brewerydb.com/v2/',
-    params : {
-      postalCode: zipcode
-    }
+    params: params
   })
     .then(function (res) {
       var data = res.data.data
@@ -130,38 +148,13 @@ function findByZipcode(zipcode) {
           lon: brewery.longitude
         })
       })
+      callback(locations)
     })
-    .catch(function (err) {
-      console.log(err)
-    })
-  return locations
 }
 
-// gets a lost of all breweries based on the pased in city and state
-function findByCity(city, state) {
-  var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
-  var locations = []
-  axios.get(url, {
-    baseURL: 'http://api.brewerydb.com/v2/',
-    params : {
-      locality: city,
-      region: state
-    }
-  })
-    .then(function (res) {
-      var data = res.data.data
-      data.forEach(function (brewery) {
-        locations.push({
-          name: brewery.brewery.name,
-          lat: brewery.latitude,
-          lon: brewery.longitude
-        })
-      })
-    })
-  return locations
+// Should be used like this: queryAPIBy({zip: 44113} , plotlocations)
+function plotLocations(locations) {
+  // do map plotting here
+  // will run after the api call finishes
+  console.log(locations)
 }
-
-
-
-
-
