@@ -52,8 +52,6 @@ function plotLocations(locations) {
   console.log(locations)
 }
 
-queryAPIBy({zip: 44113} , plotLocations)
-
 function initMap() {
   // Create a map object and specify the DOM element for display.
   var map = new google.maps.Map(document.getElementById('map'), {
