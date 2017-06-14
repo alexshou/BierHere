@@ -1,3 +1,35 @@
+// Get beers from a brewery
+// usage example:
+// getBeerFromBrewery('Unibroue', function (beers) {
+//   console.log(beers)
+// })
+function getBeerFromBrewery(brewery, callback) {
+  var url = '/search/?key=ef6233841a88d451b69d43089bd4b81a'
+
+  var params = {
+    q: brewery,
+    type: 'beer'
+  }
+
+  var beers = []
+
+  axios.get(url, {
+    // we use cors-anywhere here to get around same origin restriction that
+    // breweryDB has on their API
+    baseURL: 'https://cors-anywhere.herokuapp.com/http://api.brewerydb.com/v2',
+    params : params
+  })
+    .then(function (res) {
+      var beerData = res.data.data
+      beerData.forEach(function (beer) {
+        beers.push({
+          name: beer.name
+        })
+      })
+      callback(beers)
+    })
+}
+
 // Query by city: queryAPIBy({city: 'akron', state: 'ohio'})
 // query by zipcode: queryAPIBy({zip: '44113'})
 function queryAPIBy(options, callback) {
