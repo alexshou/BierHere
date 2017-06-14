@@ -36,20 +36,23 @@ function queryAPIBy(options, callback) {
       data.forEach(function (brewery) {
         locations.push({
           name: brewery.brewery.name,
+          description : brewery.brewery.description,
           lat: brewery.latitude,
-          lon: brewery.longitude
+          lon: brewery.longitude,
         })
       })
       callback(locations)
     })
 }
 
-// Should be used like this: queryAPIBy({zip: 44113} , plotlocations)
+// Should be used like this: queryAPIBy({zip: 44113} , plotLocations)
 function plotLocations(locations) {
   // do map plotting here
   // will run after the api call finishes
   console.log(locations)
 }
+
+queryAPIBy({zip: 44113} , plotLocations)
 
 function initMap() {
   // Create a map object and specify the DOM element for display.
