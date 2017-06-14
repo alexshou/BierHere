@@ -38,6 +38,8 @@ console.log(locArray);
 //console.log(locArray[1][1]);
 
 var locs = findByZipcode(44113);
+console.log(locs);
+console.log("locs.length: " + locs.length);
 
 //console.log(locs[0].lat);
 //console.log(locs[0].lon);
@@ -163,5 +165,3 @@ function findByCity(city, state) {
 
 
 
- console.log(locs);
-console.log("locs.length: " + locs.length);
