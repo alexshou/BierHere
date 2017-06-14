@@ -76,7 +76,7 @@ function queryAPIBy(options, callback) {
 }
 
 // Should be used like this: queryAPIBy({zip: 44113} , plotlocations)
-function plotLocations(locations) {
+function initMap(locations) {
   // do map plotting here
   // will run after the api call finishes
     var map;
@@ -92,7 +92,7 @@ function plotLocations(locations) {
     // Display multiple markers on a map
     var infoWindow = new google.maps.InfoWindow(), marker, i;
     var infoWindowContent = [];
-    
+
     // Loop through our array of markers & place each one on the map  
     for( i = 0; i < locations.length; i++ ) {
     	
@@ -129,7 +129,7 @@ function plotLocations(locations) {
     });
 }
 
-queryAPIBy({zip: 44113} , plotLocations);
+queryAPIBy({zip: 44113} , initMap);
 
 
 
