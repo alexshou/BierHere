@@ -78,6 +78,9 @@ function queryAPIBy(options, callback) {
       data.forEach(collectingFunc)
       callback(returnData)
     })
+    .catch(function (err) {
+      console.log(err)
+    })
 
   function collectLocations (brewery) {
     returnData.push({
@@ -143,8 +146,8 @@ function initMap(locations) {
         queryAPIBy({brewery: brewery}, function (beers) {
           console.log(beers)
           // TODO: put in a sidebar instead of loggin
-        })
 
+        })
       }
     })(marker, i));
 
