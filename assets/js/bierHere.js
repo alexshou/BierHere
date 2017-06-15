@@ -137,6 +137,14 @@ function initMap(locations) {
         // infoWindow.setContent(infoWindowContent[i][0]);
         infoWindow.setContent(infoWindowContent[i]);
         infoWindow.open(map, marker);
+
+        // on click we get the beers from the brewery
+        var brewery = locations[i].name
+        queryAPIBy({brewery: brewery}, function (beers) {
+          console.log(beers)
+          // TODO: put in a sidebar instead of loggin
+        })
+
       }
     })(marker, i));
 
