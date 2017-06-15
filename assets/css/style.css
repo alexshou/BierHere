@@ -1,7 +1,7 @@
 *{
-	box-sizing: border-box; 
-	padding: 0; 
-	margin: 0;
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
 }
 
 html, body, #main-container, .row {
@@ -23,27 +23,27 @@ html, body, #main-container, .row {
 
 
 .jumbotron {
-	  /*background: url("../images/hops2.jpg");*/
-	  background-position: 0% 50% 25% 100%;
-	  background-size: 100%;
-	  font-weight: bold;
-	  color: white;
-	  font-weight: bold;
-	  overflow: hidden;
-	  font-size: 50px;
-	  margin-bottom: 0px;
-	  /*position: fixed;*/
-	}
+          /*background: url("../images/hops2.jpg");*/
+          background-position: 0% 50% 25% 100%;
+          background-size: 100%;
+          font-weight: bold;
+          color: white;
+          font-weight: bold;
+          overflow: hidden;
+          font-size: 50px;
+          margin-bottom: 0px;
+          /*position: fixed;*/
+        }
 
 .navbar {
 
-	/*padding-top: 0px;*/
-	margin-top: 100px;
-	transparency: 50%;
+        /*padding-top: 0px;*/
+        margin-top: 100px;
+        transparency: 50%;
 }
 
 #main-column {
-position: fixed;
+// position: fixed;
 }
 
 
@@ -51,7 +51,7 @@ position: fixed;
     /*position: fixed;*/
     text-align: center;
     margin-right: 0px;
-    background-color: #DDD; 
+    background-color: #DDD;
     font-size: 21px;
     /*overflow-y: scroll;*/
     /*direction: rtl;*/
