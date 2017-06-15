@@ -16,7 +16,7 @@ $("#add-search").on("click", function(e) {
   var city = $("#city-input").val().trim();
   var state = $("#state-input").val().trim();
 
-  if (zip) queryAPIBy({zip: 44113} , initMap);
+  if (zip) queryAPIBy({zip: zip} , initMap);
 
 
   if (city && state) queryAPIBy({city: city, state: state} , initMap)
