@@ -65,6 +65,9 @@ function getBeerFromBrewery(brewery, callback) {
 // query by zipcode: queryAPIBy({zip: '44113'}, callbackFunc)
 function queryAPIBy(options, callback) {
   var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
+
+  // this does nothing currently, but i may need to set
+  // defaults for the options object later
   var defaults = {
     zip: null,
     city: null,
