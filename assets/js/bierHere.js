@@ -9,20 +9,17 @@ var config = {
 };
 firebase.initializeApp(config);
 var database = firebase.database();
-$("#add-search").on("click", function() {
+$("#add-search").on("click", function(e) {
   // Don't refresh the page!
-  event.preventDefault();
+  e.preventDefault();
   var zip = $("#zip-input").val().trim();
   var city = $("#city-input").val().trim();
   var state = $("#state-input").val().trim();
 
-  database.ref().push({
-    zip: zip,
-    city: city,
-    state: state
+  if (zip) queryAPIBy({zip: 44113} , initMap);
 
-    //dataAdded: firebase.database.ServerValue.TIMESTAMP
-  })
+
+  if (city && state) queryAPIBy({city: city, state: state} , initMap)
 
 });
 
@@ -153,5 +150,3 @@ function initMap(locations) {
     google.maps.event.removeListener(boundsListener);
   });
 }
-
-queryAPIBy({zip: 44113} , initMap);
