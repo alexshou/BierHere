@@ -11,10 +11,11 @@
   };
   firebase.initializeApp(config);
   var database = firebase.database();
+  var zip;
 $("#add-search").on("click", function() {
       // Don't refresh the page!
     event.preventDefault();
-    var zip = $("#zip-input").val().trim();
+    zip = $("#zip-input").val().trim();
     var city = $("#city-input").val().trim();
     var state = $("#state-input").val().trim();
     
@@ -129,7 +130,8 @@ function initMap(locations) {
     });
 }
 
-queryAPIBy({zip: 44113} , initMap);
+//queryAPIBy({zip: 44113} , initMap);
+queryAPIBy({city: "Cleveland", state: "ohio"}, initMap);
 
 
 
