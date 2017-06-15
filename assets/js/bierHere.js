@@ -61,8 +61,8 @@ function getBeerFromBrewery(brewery, callback) {
 
 }
 
-// Query by city: queryAPIBy({city: 'akron', state: 'ohio'})
-// query by zipcode: queryAPIBy({zip: '44113'})
+// Query by city: queryAPIBy({city: 'akron', state: 'ohio'}, callbackFunc)
+// query by zipcode: queryAPIBy({zip: '44113'}, callbackFunc)
 function queryAPIBy(options, callback) {
   var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
   var defaults = {
@@ -96,16 +96,19 @@ function queryAPIBy(options, callback) {
   })
     .then(function (res) {
       var data = res.data.data
-      data.forEach(function (brewery) {
-        locations.push({
-          name: brewery.brewery.name,
-          description : brewery.brewery.description,
-          lat: brewery.latitude,
-          lon: brewery.longitude,
-        })
-      })
+      data.forEach(collectLocations)
       callback(locations)
     })
+
+  function collectLocations (brewery) {
+    locations.push({
+      name: brewery.brewery.name,
+      description : brewery.brewery.description,
+      lat: brewery.latitude,
+      lon: brewery.longitude,
+    })
+  }
+
 }
 
 
