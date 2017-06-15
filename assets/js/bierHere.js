@@ -1,4 +1,3 @@
-
 // Initialize Firebase
   var config = {
     apiKey: "AIzaSyBwAkQcQYM-sXsBY9L4Fe1EsVVGPEHAY_U",
@@ -16,7 +15,7 @@ $("#add-search").on("click", function() {
     var zip = $("#zip-input").val().trim();
     var city = $("#city-input").val().trim();
     var state = $("#state-input").val().trim();
-    
+
     database.ref().push({
       zip: zip,
       city: city,
@@ -27,65 +26,49 @@ $("#add-search").on("click", function() {
 
   });
 
-// Get beers from a brewery
-// usage example:
-// getBeerFromBrewery('Unibroue', function (beers) {
-//   console.log(beers)
-// })
-function getBeerFromBrewery(brewery, callback) {
-  var url = '/search/?key=ef6233841a88d451b69d43089bd4b81a'
-
-  var params = {
-    q: brewery,
-    type: 'beer'
-  }
-
-  var beers = []
-
-  axios.get(url, {
-    // we use cors-anywhere here to get around same origin restriction that
-    // breweryDB has on their API
-    baseURL: 'https://cors-anywhere.herokuapp.com/http://api.brewerydb.com/v2',
-    params : params
-  })
-    .then(function (res) {
-      var beerData = res.data.data
-      beerData.forEach(function (beer) {
-        beers.push({
-          name: beer.name
-        })
-      })
-      callback(beers)
-    })
-}
-
-
-// Query by city: queryAPIBy({city: 'akron', state: 'ohio'})
-// query by zipcode: queryAPIBy({zip: '44113'})
+// Get beers from a brewery: queryAPIBy({brewery: 'Unibroue'}, callbackFunc)
+// Query by city: queryAPIBy({city: 'akron', state: 'ohio'}, callbackFunc)
+// query by zipcode: queryAPIBy({zip: '44113'}, callbackFunc)
 function queryAPIBy(options, callback) {
-  var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
+
+  // this does nothing currently, but i may need to set
+  // defaults for the options object later
   var defaults = {
     zip: null,
     city: null,
     state: null,
+    brewery: null
   }
 
   var options = Object.assign(defaults, options)
 
   if (options.zip) {
+    var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
     var params = {
       postalCode: options.zip
     }
+    var collectingFunc = collectLocations
+  }
+
+  if (options.brewery) {
+    var url = '/search/?key=ef6233841a88d451b69d43089bd4b81a'
+    var params = {
+      q: options.brewery,
+      type: 'beer'
+    }
+    var collectingFunc = collectBeers
   }
 
   if (options.city && options.state) {
+    var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
     var params = {
       locality: options.city,
       region: options.state
     }
+    var collectingFunc = collectLocations
   }
 
-  var locations = []
+  var returnData = []
 
   axios.get(url, {
     // we use cors-anywhere here to get around same origin restriction that
@@ -95,16 +78,25 @@ function queryAPIBy(options, callback) {
   })
     .then(function (res) {
       var data = res.data.data
-      data.forEach(function (brewery) {
-        locations.push({
-          name: brewery.brewery.name,
-          description : brewery.brewery.description,
-          lat: brewery.latitude,
-          lon: brewery.longitude,
-        })
-      })
-      callback(locations)
+      data.forEach(collectingFunc)
+      callback(returnData)
     })
+
+  function collectLocations (brewery) {
+    returnData.push({
+      name: brewery.brewery.name,
+      description : brewery.brewery.description,
+      lat: brewery.latitude,
+      lon: brewery.longitude,
+    })
+  }
+
+  function collectBeers(beer) {
+    returnData.push({
+      name: beer.name
+    })
+  }
+
 }
 
 
@@ -117,7 +109,7 @@ function initMap(locations) {
     var mapOptions = {
         mapTypeId: 'roadmap'
     };
-              
+
     // Display a map on the page
     map = new google.maps.Map(document.getElementById("map"), mapOptions);
     map.setTilt(45);
@@ -126,10 +118,10 @@ function initMap(locations) {
     var infoWindow = new google.maps.InfoWindow(), marker, i;
     var infoWindowContent = [];
 
-    // Loop through our array of markers & place each one on the map  
+    // Loop through our array of markers & place each one on the map
     for( i = 0; i < locations.length; i++ ) {
-    	
-    	infoWindowContent.push(
+
+        infoWindowContent.push(
         '<div class="info_content">' +
         '<h3>' + locations[i].name + '</h3>' +
         '<p>' + locations[i].description + '</p>' + '</div>');
@@ -141,8 +133,8 @@ function initMap(locations) {
             map: map,
             title: locations[i].name
         });
-        
-        // Allow each marker to have an info window    
+
+        // Allow each marker to have an info window
         google.maps.event.addListener(marker, 'click', (function(marker, i) {
             return function() {
                // infoWindow.setContent(infoWindowContent[i][0]);
@@ -163,6 +155,3 @@ function initMap(locations) {
 }
 
 queryAPIBy({zip: 44113} , initMap);
-
-
-
