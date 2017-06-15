@@ -1,4 +1,3 @@
-
 // Initialize Firebase
   var config = {
     apiKey: "AIzaSyBwAkQcQYM-sXsBY9L4Fe1EsVVGPEHAY_U",
@@ -16,7 +15,7 @@ $("#add-search").on("click", function() {
     var zip = $("#zip-input").val().trim();
     var city = $("#city-input").val().trim();
     var state = $("#state-input").val().trim();
-    
+
     database.ref().push({
       zip: zip,
       city: city,
@@ -50,15 +49,17 @@ function getBeerFromBrewery(brewery, callback) {
   })
     .then(function (res) {
       var beerData = res.data.data
-      beerData.forEach(function (beer) {
-        beers.push({
-          name: beer.name
-        })
-      })
+      beerData.forEach(collectBeers)
       callback(beers)
     })
-}
 
+  function collectBeers(beer) {
+    beers.push({
+      name: beer.name
+    })
+  }
+
+}
 
 // Query by city: queryAPIBy({city: 'akron', state: 'ohio'})
 // query by zipcode: queryAPIBy({zip: '44113'})
@@ -117,7 +118,7 @@ function initMap(locations) {
     var mapOptions = {
         mapTypeId: 'roadmap'
     };
-              
+
     // Display a map on the page
     map = new google.maps.Map(document.getElementById("map"), mapOptions);
     map.setTilt(45);
@@ -126,10 +127,10 @@ function initMap(locations) {
     var infoWindow = new google.maps.InfoWindow(), marker, i;
     var infoWindowContent = [];
 
-    // Loop through our array of markers & place each one on the map  
+    // Loop through our array of markers & place each one on the map
     for( i = 0; i < locations.length; i++ ) {
-    	
-    	infoWindowContent.push(
+
+        infoWindowContent.push(
         '<div class="info_content">' +
         '<h3>' + locations[i].name + '</h3>' +
         '<p>' + locations[i].description + '</p>' + '</div>');
@@ -141,8 +142,8 @@ function initMap(locations) {
             map: map,
             title: locations[i].name
         });
-        
-        // Allow each marker to have an info window    
+
+        // Allow each marker to have an info window
         google.maps.event.addListener(marker, 'click', (function(marker, i) {
             return function() {
                // infoWindow.setContent(infoWindowContent[i][0]);
@@ -163,6 +164,3 @@ function initMap(locations) {
 }
 
 queryAPIBy({zip: 44113} , initMap);
-
-
-
