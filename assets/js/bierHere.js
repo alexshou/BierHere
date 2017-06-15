@@ -26,45 +26,10 @@ $("#add-search").on("click", function() {
 
   });
 
-// Get beers from a brewery
-// usage example:
-// getBeerFromBrewery('Unibroue', function (beers) {
-//   console.log(beers)
-// })
-function getBeerFromBrewery(brewery, callback) {
-  var url = '/search/?key=ef6233841a88d451b69d43089bd4b81a'
-
-  var params = {
-    q: brewery,
-    type: 'beer'
-  }
-
-  var beers = []
-
-  axios.get(url, {
-    // we use cors-anywhere here to get around same origin restriction that
-    // breweryDB has on their API
-    baseURL: 'https://cors-anywhere.herokuapp.com/http://api.brewerydb.com/v2',
-    params : params
-  })
-    .then(function (res) {
-      var beerData = res.data.data
-      beerData.forEach(collectBeers)
-      callback(beers)
-    })
-
-  function collectBeers(beer) {
-    beers.push({
-      name: beer.name
-    })
-  }
-
-}
-
+// Get beers from a brewery: queryAPIBy({brewery: 'Unibroue'}, callbackFunc)
 // Query by city: queryAPIBy({city: 'akron', state: 'ohio'}, callbackFunc)
 // query by zipcode: queryAPIBy({zip: '44113'}, callbackFunc)
 function queryAPIBy(options, callback) {
-  var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
 
   // this does nothing currently, but i may need to set
   // defaults for the options object later
@@ -72,24 +37,38 @@ function queryAPIBy(options, callback) {
     zip: null,
     city: null,
     state: null,
+    brewery: null
   }
 
   var options = Object.assign(defaults, options)
 
   if (options.zip) {
+    var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
     var params = {
       postalCode: options.zip
     }
+    var collectingFunc = collectLocations
+  }
+
+  if (options.brewery) {
+    var url = '/search/?key=ef6233841a88d451b69d43089bd4b81a'
+    var params = {
+      q: options.brewery,
+      type: 'beer'
+    }
+    var collectingFunc = collectBeers
   }
 
   if (options.city && options.state) {
+    var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
     var params = {
       locality: options.city,
       region: options.state
     }
+    var collectingFunc = collectLocations
   }
 
-  var locations = []
+  var returnData = []
 
   axios.get(url, {
     // we use cors-anywhere here to get around same origin restriction that
@@ -99,16 +78,22 @@ function queryAPIBy(options, callback) {
   })
     .then(function (res) {
       var data = res.data.data
-      data.forEach(collectLocations)
-      callback(locations)
+      data.forEach(collectingFunc)
+      callback(returnData)
     })
 
   function collectLocations (brewery) {
-    locations.push({
+    returnData.push({
       name: brewery.brewery.name,
       description : brewery.brewery.description,
       lat: brewery.latitude,
       lon: brewery.longitude,
+    })
+  }
+
+  function collectBeers(beer) {
+    returnData.push({
+      name: beer.name
     })
   }
 
