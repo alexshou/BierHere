@@ -115,3 +115,145 @@ firebase.auth().onAuthStateChanged(function(user) {
 //  //  $("#main-title").html("Sign Up Form");
 //  // $("#main-panel").html("dynamically created sign up form will go here");
 // });
+
+$("#add-search").on("click", function(e) {
+  // Don't refresh the page!
+  e.preventDefault();
+  var zip = $("#zip-input").val().trim();
+  var city = $("#city-input").val().trim();
+  var state = $("#state-input").val().trim();
+
+  if (zip) queryAPIBy({zip: 44113} , initMap);
+
+
+  if (city && state) queryAPIBy({city: city, state: state} , initMap)
+
+});
+
+// Get beers from a brewery: queryAPIBy({brewery: 'Unibroue'}, callbackFunc)
+// Query by city: queryAPIBy({city: 'akron', state: 'ohio'}, callbackFunc)
+// query by zipcode: queryAPIBy({zip: '44113'}, callbackFunc)
+function queryAPIBy(options, callback) {
+
+  // this does nothing currently, but i may need to set
+  // defaults for the options object later
+  var defaults = {
+    zip: null,
+    city: null,
+    state: null,
+    brewery: null
+  }
+
+  var options = Object.assign(defaults, options)
+
+  if (options.zip) {
+    var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
+    var params = {
+      postalCode: options.zip
+    }
+    var collectingFunc = collectLocations
+  }
+
+  if (options.brewery) {
+    var url = '/search/?key=ef6233841a88d451b69d43089bd4b81a'
+    var params = {
+      q: options.brewery,
+      type: 'beer'
+    }
+    var collectingFunc = collectBeers
+  }
+
+  if (options.city && options.state) {
+    var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
+    var params = {
+      locality: options.city,
+      region: options.state
+    }
+    var collectingFunc = collectLocations
+  }
+
+  var returnData = []
+
+  axios.get(url, {
+    // we use cors-anywhere here to get around same origin restriction that
+    // breweryDB has on their API
+    baseURL: 'https://cors-anywhere.herokuapp.com/http://api.brewerydb.com/v2',
+    params : params
+  })
+    .then(function (res) {
+      var data = res.data.data
+      data.forEach(collectingFunc)
+      callback(returnData)
+    })
+
+  function collectLocations (brewery) {
+    returnData.push({
+      name: brewery.brewery.name,
+      description : brewery.brewery.description,
+      lat: brewery.latitude,
+      lon: brewery.longitude,
+    })
+  }
+
+  function collectBeers(beer) {
+    returnData.push({
+      name: beer.name
+    })
+  }
+
+}
+
+
+// Should be used like this: queryAPIBy({zip: 44113} , plotlocations)
+function initMap(locations) {
+  // do map plotting here
+  // will run after the api call finishes
+  var map;
+  var bounds = new google.maps.LatLngBounds();
+  var mapOptions = {
+    mapTypeId: 'roadmap'
+  };
+
+  // Display a map on the page
+  map = new google.maps.Map(document.getElementById("map"), mapOptions);
+  map.setTilt(45);
+
+  // Display multiple markers on a map
+  var infoWindow = new google.maps.InfoWindow(), marker, i;
+  var infoWindowContent = [];
+
+  // Loop through our array of markers & place each one on the map
+  for( i = 0; i < locations.length; i++ ) {
+
+    infoWindowContent.push(
+      '<div class="info_content">' +
+        '<h3>' + locations[i].name + '</h3>' +
+        '<p>' + locations[i].description + '</p>' + '</div>');
+
+    var position = new google.maps.LatLng(locations[i].lat, locations[i].lon);
+    bounds.extend(position);
+    marker = new google.maps.Marker({
+      position: position,
+      map: map,
+      title: locations[i].name
+    });
+
+    // Allow each marker to have an info window
+    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+      return function() {
+        // infoWindow.setContent(infoWindowContent[i][0]);
+        infoWindow.setContent(infoWindowContent[i]);
+        infoWindow.open(map, marker);
+      }
+    })(marker, i));
+
+    // Automatically center the map fitting all markers on the screen
+    map.fitBounds(bounds);
+  }
+
+  // Override our map zoom level once our fitBounds function runs (Make sure it only runs once)
+  var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
+    this.setZoom(14);
+    google.maps.event.removeListener(boundsListener);
+  });
+}
