@@ -293,7 +293,7 @@ Vue.component('beer-item', {
   data: function () {
     return { show: false }
   },
-  template: '<div">' +
+  template: '<div>' +
     '<li v-on:click="toggle"> {{ beer.name }}</li>' +
     '<p v-show="show"> {{ beer.description }} </p>' +
     '</div>'
