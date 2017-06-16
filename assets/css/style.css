@@ -1,6 +1,5 @@
-
 #main-column{
-	margin-top:100px;
+        margin-top:100px;
 }
 *{
         box-sizing: border-box;
@@ -55,15 +54,13 @@ html, body, #main-container, .row {
     /*position: fixed;*/
     text-align: center;
     margin-right: 0px;
-    background-color: #DDD;
-    font-size: 21px;
+    font-size: 18px;
     /*overflow-y: scroll;*/
     /*direction: rtl;*/
     top: 0;
     bottom: 0;
     height: 100%;
-    padding-bottom: 100%;
-   /*overflow: scroll;*/
+    /*overflow: scroll;*/
 }
 
 
@@ -73,4 +70,3 @@ html, body, #main-container, .row {
       overflow: scroll;
       overflow-x: hidden!important;
 }
-
