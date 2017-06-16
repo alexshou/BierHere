@@ -12,6 +12,18 @@
 
   <!-- Axios ajax/http -->
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <script src="https://unpkg.com/vue"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery.js"></script>
+
+  <!-- LINK TO FIREBASE GOES HERE -->
+  <script  async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwuBw7JJ0GymEYMMgas5c3Yu8a0-7xN9U"></script>
+
+  <script type="text/javascript" src="assets/js/bierHere.js" defer> </script>
 </head>
 
 <body>
@@ -64,17 +76,12 @@
     </div>
 
   </div>
-
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery.js"></script>
-
-  <!-- LINK TO FIREBASE GOES HERE -->
-  <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
-  <script  async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwuBw7JJ0GymEYMMgas5c3Yu8a0-7xN9U"></script>
-
-  <!-- our js -->
-  <script type="text/javascript" src="assets/js/bierHere.js"> </script>
-
+  <div id="beerlist">
+    <ul class="list-group">
+      <li v-for="beer in beers" class="list-group-item">
+        {{ beer }}
+    </ul>
+  </div>
 </body>
 
 </html>

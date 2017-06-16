@@ -144,9 +144,11 @@ function initMap(locations) {
         // on click we get the beers from the brewery
         var brewery = locations[i].name
         queryAPIBy({brewery: brewery}, function (beers) {
-          console.log(beers)
-          // TODO: put in a sidebar instead of loggin
-
+          // clear it out
+          beerlist.beers = []
+          beers.forEach(function (beer) {
+            beerlist.beers.push(beer.name)
+          })
         })
       }
     })(marker, i));
@@ -161,3 +163,12 @@ function initMap(locations) {
     google.maps.event.removeListener(boundsListener);
   });
 }
+
+var beerlist = new Vue({
+  el: '#beerlist',
+  data: {
+    beers: [
+
+    ]
+  }
+})
