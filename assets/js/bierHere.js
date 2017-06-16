@@ -198,7 +198,8 @@ function queryAPIBy(options, callback) {
 
   function collectBeers(beer) {
     returnData.push({
-      name: beer.name
+      name: beer.name,
+      description: beer.description
     })
   }
 
@@ -252,7 +253,10 @@ function initMap(locations) {
           // clear it out
           beerlist.beers = []
           beers.forEach(function (beer) {
-            beerlist.beers.push(beer.name)
+            if(!beer.description){
+              beer.description = "We don't have a descriptions for this beer"
+            }
+            beerlist.beers.push({name: beer.name, description: beer.description})
           })
         })
       }
