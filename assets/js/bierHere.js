@@ -1,31 +1,137 @@
-// Initialize Firebase
 var config = {
-  apiKey: "AIzaSyBwAkQcQYM-sXsBY9L4Fe1EsVVGPEHAY_U",
-  authDomain: "bierhere-27b59.firebaseapp.com",
-  databaseURL: "https://bierhere-27b59.firebaseio.com",
-  projectId: "bierhere-27b59",
-  storageBucket: "bierhere-27b59.appspot.com",
-  messagingSenderId: "220571997378"
+  apiKey: "AIzaSyDvb4GGuWEBtXj2HkuNi2rwPtsw-rR6NO8",
+  authDomain: "practiceuserauthentication.firebaseapp.com",
+  databaseURL: "https://practiceuserauthentication.firebaseio.com",
+  projectId: "practiceuserauthentication",
+  storageBucket: "practiceuserauthentication.appspot.com",
+  messagingSenderId: "333032893466"
 };
+
 firebase.initializeApp(config);
+
 var database = firebase.database();
+var email ="";
+var password = "";
+var auth= firebase.auth();
+var user = firebase.auth().currentUser;
+
+$("#sign-up-form").hide();
+
+//on click event for submitting login credentials
+$("#submit-button").on("click", function(event) {
+  event.preventDefault();
+
+  // capturing the form values for login email and password
+  //will need to add form validation later
+  email = $("#inputEmail").val().trim();
+  password = $("#inputPassword").val().trim();
+
+  //checking if values are being logged; will delete later
+  console.log(email);
+  console.log(password);
+
+  auth.signInWithEmailAndPassword(email,password);
+  //  function(errorObject) {
+  //  console.log("Errors handled: " + errorObject.code);
+  // };
+  // $("#inputEmail").empty();
+  // $("#inputPassword").empty();
+
+});
+
+$(".sign-up-link").on("click", function(event) {
+  console.log("sign up form clicked");
+  $("#sign-up-form").show();
+
+});
+
+//need to change this click event for a different form that will sign the user up
+$("#signup-button").on("click", function(event) {
+  event.preventDefault();
+
+  // capturing the form values for login email and password
+  //To Do: add form validation later
+  email = $("#signupEmail").val().trim();
+  password = $("#signupPassword").val().trim();
+  confirmPassword = $("#signupConfirmPassword").val().trim();
+
+  //checking if values are being logged; will delete later
+  console.log(email);
+  console.log(password);
+
+  if ( password == confirmPassword) {
+
+    $("#validate-status").append("Passwords Match, Your Account Has Been Created");
+    auth.createUserWithEmailAndPassword(email, password);
+
+    // function(errorObject) {
+    // console.log("Errors handled: " + errorObject.code);
+
+    // };
+  } else {
+    console.log("passwords dont match");
+    //var passwordError = $("<p>").html("Passwords Don't Match")
+    $("#validate-status").append("Passwords Don't Match");
+  }
+
+});
+
+//add a realtime listener
+firebase.auth().onAuthStateChanged(function(user) {
+
+  if (user) {
+    console.log(user);
+    $(".log-out").show();
+    $(".dropdown-toggle").hide();
+    //$(".dropdown-menu").hide();
+
+    //To Do: add logout button
+    // var logOut =$("<button>")
+    // $(".dropdown-toggle").html("Log Out").addClass("log-out-button");
+    // $(".dropdown-menu").hide();
+
+  } else {
+    console.log("not logged in");
+    //To Do: hide logout button
+    $(".log-out").hide();
+  }
+
+});
+
+//need to have logout button click event
+$(".log-out").on("click", function(event) {
+  event.preventDefault();
+  firebase.auth().signOut();
+  $(".log-out-button").hide();
+  $(".dropdown-toggle").show();
+});
+
+//  // dynamically changing the inner html of the main panel to create a sign up form
+// $(".sign-up-form").on("click", function(event) {
+//       event.preventDefault();
+//  //  $("#main-title").html("Sign Up Form");
+//  // $("#main-panel").html("dynamically created sign up form will go here");
+// });
+
 $("#add-search").on("click", function(e) {
   // Don't refresh the page!
   e.preventDefault();
   var zip = $("#zip-input").val().trim();
   var city = $("#city-input").val().trim();
   var state = $("#state-input").val().trim();
+  console.log(zip);
 
-  if (zip) queryAPIBy({zip: 44113} , initMap);
+  console.log(zip, city, state)
 
+  if (zip) queryAPIBy({zip: zip} , initMap);
 
   if (city && state) queryAPIBy({city: city, state: state} , initMap)
-
 });
 
 // Get beers from a brewery: queryAPIBy({brewery: 'Unibroue'}, callbackFunc)
 // Query by city: queryAPIBy({city: 'akron', state: 'ohio'}, callbackFunc)
 // query by zipcode: queryAPIBy({zip: '44113'}, callbackFunc)
+
 function queryAPIBy(options, callback) {
 
   // this does nothing currently, but i may need to set
