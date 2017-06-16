@@ -1,4 +1,3 @@
-// Initialize Firebase
 var config = {
   apiKey: "AIzaSyDvb4GGuWEBtXj2HkuNi2rwPtsw-rR6NO8",
   authDomain: "practiceuserauthentication.firebaseapp.com",
@@ -120,6 +119,7 @@ $("#add-search").on("click", function(e) {
   var zip = $("#zip-input").val().trim();
   var city = $("#city-input").val().trim();
   var state = $("#state-input").val().trim();
+  console.log(zip);
 
   console.log(zip, city, state)
 
@@ -131,6 +131,7 @@ $("#add-search").on("click", function(e) {
 // Get beers from a brewery: queryAPIBy({brewery: 'Unibroue'}, callbackFunc)
 // Query by city: queryAPIBy({city: 'akron', state: 'ohio'}, callbackFunc)
 // query by zipcode: queryAPIBy({zip: '44113'}, callbackFunc)
+
 function queryAPIBy(options, callback) {
 
   // this does nothing currently, but i may need to set

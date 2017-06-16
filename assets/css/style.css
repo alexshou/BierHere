@@ -1,3 +1,7 @@
+
+#main-column{
+	margin-top:100px;
+}
 *{
         box-sizing: border-box;
         padding: 0;
@@ -69,3 +73,4 @@ html, body, #main-container, .row {
       overflow: scroll;
       overflow-x: hidden!important;
 }
+
