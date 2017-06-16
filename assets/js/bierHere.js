@@ -119,7 +119,6 @@ $("#add-search").on("click", function(e) {
   var zip = $("#zip-input").val().trim();
   var city = $("#city-input").val().trim();
   var state = $("#state-input").val().trim();
-  console.log(zip);
 
   console.log(zip, city, state)
 
