@@ -119,7 +119,7 @@ $("#add-search").on("click", function(e) {
   var zip = $("#zip-input").val().trim();
   var city = $("#city-input").val().trim();
   var state = $("#state-input").val().trim();
-  console.log(zip);
+
   console.log(zip, city, state)
 
   if (zip) queryAPIBy({zip: zip} , initMap);
@@ -183,6 +183,9 @@ function queryAPIBy(options, callback) {
       data.forEach(collectingFunc)
       callback(returnData)
     })
+    .catch(function (err) {
+      console.log(err)
+    })
 
   function collectLocations (brewery) {
     returnData.push({
@@ -195,7 +198,8 @@ function queryAPIBy(options, callback) {
 
   function collectBeers(beer) {
     returnData.push({
-      name: beer.name
+      name: beer.name,
+      description: beer.description
     })
   }
 
@@ -242,6 +246,19 @@ function initMap(locations) {
         // infoWindow.setContent(infoWindowContent[i][0]);
         infoWindow.setContent(infoWindowContent[i]);
         infoWindow.open(map, marker);
+
+        // on click we get the beers from the brewery
+        var brewery = locations[i].name
+        queryAPIBy({brewery: brewery}, function (beers) {
+          // clear it out
+          beerlist.beers = []
+          beers.forEach(function (beer) {
+            if(!beer.description){
+              beer.description = "We don't have a descriptions for this beer"
+            }
+            beerlist.beers.push({name: beer.name, description: beer.description})
+          })
+        })
       }
     })(marker, i));
 
@@ -255,3 +272,21 @@ function initMap(locations) {
     google.maps.event.removeListener(boundsListener);
   });
 }
+
+// VUE
+var beerlist = new Vue({
+  el: '#beerlist',
+  data: {
+    beers: [
+
+    ]
+  }
+})
+
+Vue.component('beer-item', {
+  props: ['beer'],
+  template: '<div>' +
+    '<li> {{ beer.name }}</li>' +
+    '<p> {{ beer.description }} </p>' +
+    '</div>'
+})
