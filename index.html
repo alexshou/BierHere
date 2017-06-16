@@ -156,11 +156,11 @@
 
             <div class="panel-body" id="beerlist">
               <ul class="list-group">
-                <ul v-for="beer in beers" class="list-group-item">
-                  <!-- name -->
-                  <li>{{ beer.name }}</li>
-                  <!-- description -->
-                  <li>{{ beer.description }}</li>
+                <beer-item
+                  v-for="beer in beers"
+                  v-bind:beer="beer"
+                  v-bind:key="beer.id">
+                </beer-item>
               </ul>
             </div>
           </div>

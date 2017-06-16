@@ -273,6 +273,7 @@ function initMap(locations) {
   });
 }
 
+// VUE
 var beerlist = new Vue({
   el: '#beerlist',
   data: {
@@ -280,4 +281,12 @@ var beerlist = new Vue({
 
     ]
   }
+})
+
+Vue.component('beer-item', {
+  props: ['beer'],
+  template: '<div>' +
+    '<li> {{ beer.name }}</li>' +
+    '<p> {{ beer.description }} </p>' +
+    '</div>'
 })
