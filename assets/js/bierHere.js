@@ -295,6 +295,6 @@ Vue.component('beer-item', {
   },
   template: '<div>' +
     '<li v-on:click="toggle"> {{ beer.name }}</li>' +
-    '<p v-show="show"> {{ beer.description }} </p>' +
+    '<p v-show="show" class="beer"> {{ beer.description }} </p>' +
     '</div>'
 })
