@@ -1,12 +1,12 @@
 // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyBwAkQcQYM-sXsBY9L4Fe1EsVVGPEHAY_U",
-    authDomain: "bierhere-27b59.firebaseapp.com",
-    databaseURL: "https://bierhere-27b59.firebaseio.com",
-    projectId: "bierhere-27b59",
-    storageBucket: "bierhere-27b59.appspot.com",
-    messagingSenderId: "220571997378"
-  };
+var config = {
+   apiKey: "AIzaSyDvb4GGuWEBtXj2HkuNi2rwPtsw-rR6NO8",
+   authDomain: "practiceuserauthentication.firebaseapp.com",
+   databaseURL: "https://practiceuserauthentication.firebaseio.com",
+   projectId: "practiceuserauthentication",
+   storageBucket: "practiceuserauthentication.appspot.com",
+   messagingSenderId: "333032893466"
+ };
 
 firebase.initializeApp(config);
 
