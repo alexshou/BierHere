@@ -12,11 +12,6 @@ html, body, #main-container, .row {
 }
 
 
-.no-gutter > [class*='col-'] {
-    padding-right:0;
-    /*padding-left:0;*/
-}
-
 /*setting the size of the navbar dropdown*/
 #login-dp{
     min-width: 250px;
@@ -46,7 +41,7 @@ html, body, #main-container, .row {
 }
 
 #main-column {
-// position: fixed;
+/*position: fixed;*/
 }
 
 
