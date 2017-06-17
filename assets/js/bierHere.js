@@ -1,11 +1,12 @@
+// Initialize Firebase
 var config = {
-  apiKey: "AIzaSyDvb4GGuWEBtXj2HkuNi2rwPtsw-rR6NO8",
-  authDomain: "practiceuserauthentication.firebaseapp.com",
-  databaseURL: "https://practiceuserauthentication.firebaseio.com",
-  projectId: "practiceuserauthentication",
-  storageBucket: "practiceuserauthentication.appspot.com",
-  messagingSenderId: "333032893466"
-};
+   apiKey: "AIzaSyDvb4GGuWEBtXj2HkuNi2rwPtsw-rR6NO8",
+   authDomain: "practiceuserauthentication.firebaseapp.com",
+   databaseURL: "https://practiceuserauthentication.firebaseio.com",
+   projectId: "practiceuserauthentication",
+   storageBucket: "practiceuserauthentication.appspot.com",
+   messagingSenderId: "333032893466"
+ };
 
 firebase.initializeApp(config);
 
@@ -14,8 +15,6 @@ var email ="";
 var password = "";
 var auth= firebase.auth();
 var user = firebase.auth().currentUser;
-
-$("#sign-up-form").hide();
 
 //on click event for submitting login credentials
 $("#submit-button").on("click", function(event) {
@@ -41,7 +40,7 @@ $("#submit-button").on("click", function(event) {
 
 $(".sign-up-link").on("click", function(event) {
   console.log("sign up form clicked");
-  $("#sign-up-form").show();
+ // $("#sign-up-form").show();
 
 });
 
@@ -54,24 +53,36 @@ $("#signup-button").on("click", function(event) {
   email = $("#signupEmail").val().trim();
   password = $("#signupPassword").val().trim();
   confirmPassword = $("#signupConfirmPassword").val().trim();
+  var atpos = email.indexOf("@");
+  var dotpos = email.lastIndexOf(".");
 
-  //checking if values are being logged; will delete later
-  console.log(email);
-  console.log(password);
+  if (atpos<1 || dotpos<atpos+2 || dotpos+2>=email.length) {
+    $("#email-validate-status").html("Not A Valid Email Address")
+      return false;
+}
+
+ if (password.length < 6) {
+  $("#validate-status").html("Password Must Be At Least 6 Characters In Length");
+  return false;
+ }
 
   if ( password == confirmPassword) {
 
-    $("#validate-status").append("Passwords Match, Your Account Has Been Created");
-    auth.createUserWithEmailAndPassword(email, password);
 
-    // function(errorObject) {
-    // console.log("Errors handled: " + errorObject.code);
+    $("#validate-status").append("Passwords Match, Your Account Has Been Created");
+    auth.createUserWithEmailAndPassword(email, password).then(function(){
+      window.location.href = "./index.html";
+    });
+   // window.location.href = "./index.html";
+
+   // function(errorObject) {
+   //  console.log("Errors handled: " + errorObject.code);
 
     // };
   } else {
     console.log("passwords dont match");
     //var passwordError = $("<p>").html("Passwords Don't Match")
-    $("#validate-status").append("Passwords Don't Match");
+    $("#validate-status").html("Passwords Don't Match");
   }
 
 });
@@ -83,17 +94,14 @@ firebase.auth().onAuthStateChanged(function(user) {
     console.log(user);
     $(".log-out").show();
     $(".dropdown-toggle").hide();
-    //$(".dropdown-menu").hide();
-
-    //To Do: add logout button
-    // var logOut =$("<button>")
-    // $(".dropdown-toggle").html("Log Out").addClass("log-out-button");
-    // $(".dropdown-menu").hide();
+    $(".navbar-text").html("Welcome " + user.email);
 
   } else {
     console.log("not logged in");
     //To Do: hide logout button
     $(".log-out").hide();
+   $(".navbar-text").html("Already have an account?");
+
   }
 
 });
@@ -130,7 +138,6 @@ $("#add-search").on("click", function(e) {
 // Get beers from a brewery: queryAPIBy({brewery: 'Unibroue'}, callbackFunc)
 // Query by city: queryAPIBy({city: 'akron', state: 'ohio'}, callbackFunc)
 // query by zipcode: queryAPIBy({zip: '44113'}, callbackFunc)
-
 function queryAPIBy(options, callback) {
 
   // this does nothing currently, but i may need to set
@@ -183,9 +190,6 @@ function queryAPIBy(options, callback) {
       data.forEach(collectingFunc)
       callback(returnData)
     })
-    .catch(function (err) {
-      console.log(err)
-    })
 
   function collectLocations (brewery) {
     returnData.push({
@@ -226,10 +230,23 @@ function initMap(locations) {
 
   // Loop through our array of markers & place each one on the map
   for( i = 0; i < locations.length; i++ ) {
-    infoWindowContent.push(
+    var queryURL = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + locations[i].lat + ","
+    + locations[i].lon + "&sensor=true" ;
+    var locationName = locations[i].name;
+    var locationDescription = locations[i].description
+
+        // Creates AJAX call convert geocode to real address
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).done(function(response) {
+
+      infoWindowContent.push(
       '<div class="info_content">' +
-        '<h3>' + locations[i].name + " " + "%RATING%/5" + '</h3>' +
-        '<p>' + locations[i].description + '</p>' + '</div>');
+      '<h3>' + locations[i].name + " " + "%RATING%/5" + '</h3>' +
+      '<h5>' + response.results[0].formatted_address + '</h5>' +
+      '<p>' + locationDescription + '</p>' + '</div>');
+    });
 
     var position = new google.maps.LatLng(locations[i].lat, locations[i].lon);
     bounds.extend(position);
