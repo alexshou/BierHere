@@ -285,8 +285,16 @@ var beerlist = new Vue({
 
 Vue.component('beer-item', {
   props: ['beer'],
+  methods: {
+    toggle: function () {
+      this.show = !this.show
+    }
+  },
+  data: function () {
+    return { show: false }
+  },
   template: '<div>' +
-    '<li> {{ beer.name }}</li>' +
-    '<p> {{ beer.description }} </p>' +
+    '<li v-on:click="toggle"> {{ beer.name }}</li>' +
+    '<p v-show="show"> {{ beer.description }} </p>' +
     '</div>'
 })
