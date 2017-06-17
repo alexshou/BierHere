@@ -55,16 +55,23 @@ $("#signup-button").on("click", function(event) {
   email = $("#signupEmail").val().trim();
   password = $("#signupPassword").val().trim();
   confirmPassword = $("#signupConfirmPassword").val().trim();
+  var atpos = email.indexOf("@");
+  var dotpos = email.lastIndexOf(".");
 
-  //checking if values are being logged; will delete later
-  // console.log(email);
-  // console.log(password);
+  if (atpos<1 || dotpos<atpos+2 || dotpos+2>=email.length) {
+    $("#email-validate-status").html("Not A Valid Email Address")
+      return false;
+}
+
+ if (password.length < 6) {
+  $("#validate-status").html("Password Must Be At Least 6 Characters In Length");
+  return false;
+ }
 
   if ( password == confirmPassword) {
 
-    $("#validate-status").append("Passwords Match, Your Account Has Been Created");
+    $("#validate-status").html("Passwords Match, Your Account Has Been Created");
     auth.createUserWithEmailAndPassword(email, password);
-    $("#sign-up-form").hide();
 
 
 
@@ -75,7 +82,7 @@ $("#signup-button").on("click", function(event) {
   } else {
     console.log("passwords dont match");
     //var passwordError = $("<p>").html("Passwords Don't Match")
-    $("#validate-status").append("Passwords Don't Match");
+    $("#validate-status").html("Passwords Don't Match");
   }
 
 });
