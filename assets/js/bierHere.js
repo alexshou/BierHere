@@ -195,7 +195,8 @@ function queryAPIBy(options, callback) {
 
   function collectBeers(beer) {
     returnData.push({
-      name: beer.name
+      name: beer.name,
+      description: beer.description
     })
   }
 
@@ -255,6 +256,19 @@ function initMap(locations) {
         // infoWindow.setContent(infoWindowContent[i][0]);
         infoWindow.setContent(infoWindowContent[i]);
         infoWindow.open(map, marker);
+
+        // on click we get the beers from the brewery
+        var brewery = locations[i].name
+        queryAPIBy({brewery: brewery}, function (beers) {
+          // clear it out
+          beerlist.beers = []
+          beers.forEach(function (beer) {
+            if(!beer.description){
+              beer.description = "We don't have a descriptions for this beer"
+            }
+            beerlist.beers.push({name: beer.name, description: beer.description})
+          })
+        })
       }
     })(marker, i));
 
@@ -295,4 +309,3 @@ Vue.component('beer-item', {
     '<p v-show="show"> {{ beer.description }} </p>' +
     '</div>'
 })
-
