@@ -226,10 +226,9 @@ function initMap(locations) {
 
   // Loop through our array of markers & place each one on the map
   for( i = 0; i < locations.length; i++ ) {
-
     infoWindowContent.push(
       '<div class="info_content">' +
-        '<h3>' + locations[i].name + '</h3>' +
+        '<h3>' + locations[i].name + " " + "%RATING%/5" + '</h3>' +
         '<p>' + locations[i].description + '</p>' + '</div>');
 
     var position = new google.maps.LatLng(locations[i].lat, locations[i].lon);
@@ -258,6 +257,14 @@ function initMap(locations) {
             }
             beerlist.beers.push({name: beer.name, description: beer.description})
           })
+        });
+
+        getRating(brewery, function (rating) {
+          if (isNaN(rating)) {
+            var rating = '?'
+          }
+          var newText = infoWindowContent[i].replace(/%RATING%/, rating)
+          infoWindow.setContent(newText);
         })
       }
     })(marker, i));
@@ -271,6 +278,29 @@ function initMap(locations) {
     this.setZoom(14);
     google.maps.event.removeListener(boundsListener);
   });
+}
+
+function getRating(name, callback) {
+  var name = name.replace(/\.|#|$|\[|\]/g, "")
+  var ratings = []
+  firebase.database().ref(name).once('value')
+    .then(function(snapshot) {
+      for (var value in snapshot.val()) {
+        ratings.push(snapshot.val()[value].rating)
+      }
+      callback(average(ratings))
+    })
+
+  function average(array) {
+    return (array.reduce(function(acc, val) {
+      return acc + val;
+    }, 0)) / array.length;
+  }
+
+}
+
+function addRating(name, rating) {
+  firebase.database().ref(name).push({rating: rating})
 }
 
 // VUE
