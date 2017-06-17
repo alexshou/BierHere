@@ -224,10 +224,23 @@ function initMap(locations) {
   // Loop through our array of markers & place each one on the map
   for( i = 0; i < locations.length; i++ ) {
 
-    infoWindowContent.push(
+    var queryURL = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + locations[i].lat + "," 
+    + locations[i].lon + "&sensor=true" ;
+    var locationName = locations[i].name;
+    var locationDescription = locations[i].description
+
+        // Creates AJAX call convert geocode to real address
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).done(function(response) {
+              
+      infoWindowContent.push(
       '<div class="info_content">' +
-        '<h3>' + locations[i].name + '</h3>' +
-        '<p>' + locations[i].description + '</p>' + '</div>');
+      '<h3>' + locationName + '</h3>' +
+      '<h4>' + response.results[0].formatted_address + '</h4>' +
+      '<p>' + locationDescription + '</p>' + '</div>');
+    });
 
     var position = new google.maps.LatLng(locations[i].lat, locations[i].lon);
     bounds.extend(position);
