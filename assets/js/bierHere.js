@@ -1,3 +1,4 @@
+// Initialize Firebase
 var config = {
   apiKey: "AIzaSyDvb4GGuWEBtXj2HkuNi2rwPtsw-rR6NO8",
   authDomain: "practiceuserauthentication.firebaseapp.com",
@@ -56,16 +57,19 @@ $("#signup-button").on("click", function(event) {
   confirmPassword = $("#signupConfirmPassword").val().trim();
 
   //checking if values are being logged; will delete later
-  console.log(email);
-  console.log(password);
+  // console.log(email);
+  // console.log(password);
 
   if ( password == confirmPassword) {
 
     $("#validate-status").append("Passwords Match, Your Account Has Been Created");
     auth.createUserWithEmailAndPassword(email, password);
+    $("#sign-up-form").hide();
 
-    // function(errorObject) {
-    // console.log("Errors handled: " + errorObject.code);
+
+
+   // function(errorObject) {
+   //  console.log("Errors handled: " + errorObject.code);
 
     // };
   } else {
@@ -83,17 +87,14 @@ firebase.auth().onAuthStateChanged(function(user) {
     console.log(user);
     $(".log-out").show();
     $(".dropdown-toggle").hide();
-    //$(".dropdown-menu").hide();
-
-    //To Do: add logout button
-    // var logOut =$("<button>")
-    // $(".dropdown-toggle").html("Log Out").addClass("log-out-button");
-    // $(".dropdown-menu").hide();
+    $(".navbar-text").html("Welcome " + user.email);
 
   } else {
     console.log("not logged in");
     //To Do: hide logout button
     $(".log-out").hide();
+   $(".navbar-text").html("Already have an account?");
+
   }
 
 });
@@ -130,7 +131,6 @@ $("#add-search").on("click", function(e) {
 // Get beers from a brewery: queryAPIBy({brewery: 'Unibroue'}, callbackFunc)
 // Query by city: queryAPIBy({city: 'akron', state: 'ohio'}, callbackFunc)
 // query by zipcode: queryAPIBy({zip: '44113'}, callbackFunc)
-
 function queryAPIBy(options, callback) {
 
   // this does nothing currently, but i may need to set
@@ -183,9 +183,6 @@ function queryAPIBy(options, callback) {
       data.forEach(collectingFunc)
       callback(returnData)
     })
-    .catch(function (err) {
-      console.log(err)
-    })
 
   function collectLocations (brewery) {
     returnData.push({
@@ -198,8 +195,7 @@ function queryAPIBy(options, callback) {
 
   function collectBeers(beer) {
     returnData.push({
-      name: beer.name,
-      description: beer.description
+      name: beer.name
     })
   }
 
@@ -246,19 +242,6 @@ function initMap(locations) {
         // infoWindow.setContent(infoWindowContent[i][0]);
         infoWindow.setContent(infoWindowContent[i]);
         infoWindow.open(map, marker);
-
-        // on click we get the beers from the brewery
-        var brewery = locations[i].name
-        queryAPIBy({brewery: brewery}, function (beers) {
-          // clear it out
-          beerlist.beers = []
-          beers.forEach(function (beer) {
-            if(!beer.description){
-              beer.description = "We don't have a descriptions for this beer"
-            }
-            beerlist.beers.push({name: beer.name, description: beer.description})
-          })
-        })
       }
     })(marker, i));
 
@@ -272,6 +255,7 @@ function initMap(locations) {
     google.maps.event.removeListener(boundsListener);
   });
 }
+
 
 // VUE
 var beerlist = new Vue({
@@ -298,3 +282,4 @@ Vue.component('beer-item', {
     '<p v-show="show"> {{ beer.description }} </p>' +
     '</div>'
 })
+
