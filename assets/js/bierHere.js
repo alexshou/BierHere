@@ -243,7 +243,7 @@ function initMap(locations) {
 
       infoWindowContent.push(
       '<div class="info_content">' +
-      '<h3>' + locations[i].name + " " + "%RATING%/5" + '</h3>' +
+      '<h3>' + locationName + " " + "%RATING%/5" + '</h3>' +
       '<h5>' + response.results[0].formatted_address + '</h5>' +
       '<p>' + locationDescription + '</p>' + '</div>');
     });
