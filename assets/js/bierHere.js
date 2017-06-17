@@ -151,8 +151,10 @@ function queryAPIBy(options, callback) {
 
   var options = Object.assign(defaults, options)
 
+  var key = '140c95583b73943351e5001025e8a88a'
+
   if (options.zip) {
-    var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
+    var url = '/locations/?key=' + key
     var params = {
       postalCode: options.zip
     }
@@ -160,7 +162,7 @@ function queryAPIBy(options, callback) {
   }
 
   if (options.brewery) {
-    var url = '/search/?key=ef6233841a88d451b69d43089bd4b81a'
+    var url = '/search/?key=' + key
     var params = {
       q: options.brewery,
       type: 'beer'
@@ -169,7 +171,7 @@ function queryAPIBy(options, callback) {
   }
 
   if (options.city && options.state) {
-    var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
+    var url = '/locations/?key=' + key
     var params = {
       locality: options.city,
       region: options.state
@@ -235,18 +237,11 @@ function initMap(locations) {
     var locationName = locations[i].name;
     var locationDescription = locations[i].description
 
-        // Creates AJAX call convert geocode to real address
-    $.ajax({
-      url: queryURL,
-      method: "GET"
-    }).done(function(response) {
-
       infoWindowContent.push(
       '<div class="info_content">' +
-      '<h3>' + locationName + " " + "%RATING%/5" + '</h3>' +
-      '<h5>' + response.results[0].formatted_address + '</h5>' +
+      '<h3>' +  locationName + " " + "%RATING%/5" + '</h3>' +
       '<p>' + locationDescription + '</p>' + '</div>');
-    });
+
 
     var position = new google.maps.LatLng(locations[i].lat, locations[i].lon);
     bounds.extend(position);
