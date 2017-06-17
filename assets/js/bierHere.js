@@ -248,18 +248,6 @@ function initMap(locations) {
                                  });
     }(locationName, locationDescription))
 
-    // var queryURL = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + locations[i].lat + ","
-    // + locations[i].lon + "&sensor=true" ;
-    // var locationName = locations[i].name;
-    // var locationDescription = locations[i].description
-
-    //   infoWindowContent.push(
-    //   '<div class="info_content">' +
-    //   '<h3>' + locationName + " " + "%RATING%/5" + '</h3>' +
-    //   '<p>' + locationDescription + '</p>' + '</div>');
-
-
-
     var position = new google.maps.LatLng(locations[i].lat, locations[i].lon);
     bounds.extend(position);
     marker = new google.maps.Marker({
