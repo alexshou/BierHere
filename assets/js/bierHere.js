@@ -230,8 +230,7 @@ function initMap(locations) {
 
   // Loop through our array of markers & place each one on the map
   for( i = 0; i < locations.length; i++ ) {
-
-    var queryURL = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + locations[i].lat + "," 
+    var queryURL = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + locations[i].lat + ","
     + locations[i].lon + "&sensor=true" ;
     var locationName = locations[i].name;
     var locationDescription = locations[i].description
@@ -241,10 +240,10 @@ function initMap(locations) {
       url: queryURL,
       method: "GET"
     }).done(function(response) {
-              
+
       infoWindowContent.push(
       '<div class="info_content">' +
-      '<h3>' + locationName + '</h3>' +
+      '<h3>' + locationName + " " + "%RATING%/5" + '</h3>' +
       '<h5>' + response.results[0].formatted_address + '</h5>' +
       '<p>' + locationDescription + '</p>' + '</div>');
     });
@@ -275,6 +274,14 @@ function initMap(locations) {
             }
             beerlist.beers.push({name: beer.name, description: beer.description})
           })
+        });
+
+        getRating(brewery, function (rating) {
+          if (isNaN(rating)) {
+            var rating = '?'
+          }
+          var newText = infoWindowContent[i].replace(/%RATING%/, rating)
+          infoWindow.setContent(newText);
         })
       }
     })(marker, i));
@@ -290,6 +297,28 @@ function initMap(locations) {
   });
 }
 
+function getRating(name, callback) {
+  var name = name.replace(/\.|#|$|\[|\]/g, "")
+  var ratings = []
+  firebase.database().ref(name).once('value')
+    .then(function(snapshot) {
+      for (var value in snapshot.val()) {
+        ratings.push(snapshot.val()[value].rating)
+      }
+      callback(average(ratings))
+    })
+
+  function average(array) {
+    return (array.reduce(function(acc, val) {
+      return acc + val;
+    }, 0)) / array.length;
+  }
+
+}
+
+function addRating(name, rating) {
+  firebase.database().ref(name).push({rating: rating})
+}
 
 // VUE
 var beerlist = new Vue({
