@@ -228,6 +228,19 @@ function initMap(locations) {
         '<h3>' + locations[i].name + '</h3>' +
         '<p>' + locations[i].description + '</p>' + '</div>');
 
+    queryURL = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + locations[i].lat + "," 
+    + locations[i].lon + "&sensor=true" ;
+
+        // Creates AJAX call for the specific topic button being clicked
+        $.ajax({
+          url: queryURL,
+          method: "GET"
+        }).done(function(response) {
+
+            console.log(response);
+        });
+
+
     var position = new google.maps.LatLng(locations[i].lat, locations[i].lon);
     bounds.extend(position);
     marker = new google.maps.Marker({
