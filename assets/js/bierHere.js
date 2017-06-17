@@ -233,14 +233,31 @@ function initMap(locations) {
   // Loop through our array of markers & place each one on the map
   for( i = 0; i < locations.length; i++ ) {
     var queryURL = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + locations[i].lat + ","
-    + locations[i].lon + "&sensor=true" ;
+        + locations[i].lon + "&sensor=true" ;
     var locationName = locations[i].name;
-    var locationDescription = locations[i].description
+    var locationDescription = locations[i].description;
+    (function(thisName, thisDescription){
+      $.ajax({
+        url: queryURL,
+        method: "GET"
+      }).done(function(response) {        infoWindowContent.push(
+        '<div class="info_content">' +
+          '<h3>' + thisName + " " + "%RATING%/5" + '</h3>' +
+          '<h5>' + response.results[0].formatted_address + '</h5>' +
+          '<p>' + thisDescription + '</p>' + '</div>');
+                                 });
+    }(locationName, locationDescription))
 
-      infoWindowContent.push(
-      '<div class="info_content">' +
-      '<h3>' + locationName + " " + "%RATING%/5" + '</h3>' +
-      '<p>' + locationDescription + '</p>' + '</div>');
+    // var queryURL = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + locations[i].lat + ","
+    // + locations[i].lon + "&sensor=true" ;
+    // var locationName = locations[i].name;
+    // var locationDescription = locations[i].description
+
+    //   infoWindowContent.push(
+    //   '<div class="info_content">' +
+    //   '<h3>' + locationName + " " + "%RATING%/5" + '</h3>' +
+    //   '<p>' + locationDescription + '</p>' + '</div>');
+
 
 
     var position = new google.maps.LatLng(locations[i].lat, locations[i].lon);
