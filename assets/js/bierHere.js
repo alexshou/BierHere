@@ -239,7 +239,7 @@ function initMap(locations) {
 
       infoWindowContent.push(
       '<div class="info_content">' +
-      '<h3>' +  locationName + " " + "%RATING%/5" + '</h3>' +
+      '<h3>' + locationName + " " + "%RATING%/5" + '</h3>' +
       '<p>' + locationDescription + '</p>' + '</div>');
 
 
@@ -304,9 +304,9 @@ function getRating(name, callback) {
     })
 
   function average(array) {
-    return (array.reduce(function(acc, val) {
+    return ((array.reduce(function(acc, val) {
       return acc + val;
-    }, 0)) / array.length;
+    }, 0)) / array.length).toFixed(1);
   }
 
 }
