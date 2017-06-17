@@ -64,9 +64,15 @@ html, body, #main-container, .row {
 }
 
 
-/*.scroll {
+.scroll {
       unicode-bidi:bidi-override;
       direction: rtl;
       overflow: scroll;
       overflow-x: hidden!important;
+}
+
+.beer {
+  width: 100%;
+  background-color: #eee;
+  border: 1px solid #ccc;
 }
