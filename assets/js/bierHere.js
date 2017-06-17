@@ -1,12 +1,12 @@
 // Initialize Firebase
-var config = {
-  apiKey: "AIzaSyDvb4GGuWEBtXj2HkuNi2rwPtsw-rR6NO8",
-  authDomain: "practiceuserauthentication.firebaseapp.com",
-  databaseURL: "https://practiceuserauthentication.firebaseio.com",
-  projectId: "practiceuserauthentication",
-  storageBucket: "practiceuserauthentication.appspot.com",
-  messagingSenderId: "333032893466"
-};
+  var config = {
+    apiKey: "AIzaSyBwAkQcQYM-sXsBY9L4Fe1EsVVGPEHAY_U",
+    authDomain: "bierhere-27b59.firebaseapp.com",
+    databaseURL: "https://bierhere-27b59.firebaseio.com",
+    projectId: "bierhere-27b59",
+    storageBucket: "bierhere-27b59.appspot.com",
+    messagingSenderId: "220571997378"
+  };
 
 firebase.initializeApp(config);
 
@@ -15,8 +15,6 @@ var email ="";
 var password = "";
 var auth= firebase.auth();
 var user = firebase.auth().currentUser;
-
-$("#sign-up-form").hide();
 
 //on click event for submitting login credentials
 $("#submit-button").on("click", function(event) {
@@ -42,7 +40,7 @@ $("#submit-button").on("click", function(event) {
 
 $(".sign-up-link").on("click", function(event) {
   console.log("sign up form clicked");
-  $("#sign-up-form").show();
+ // $("#sign-up-form").show();
 
 });
 
@@ -63,10 +61,10 @@ $("#signup-button").on("click", function(event) {
   if ( password == confirmPassword) {
 
     $("#validate-status").append("Passwords Match, Your Account Has Been Created");
-    auth.createUserWithEmailAndPassword(email, password);
-    $("#sign-up-form").hide();
-
-
+    auth.createUserWithEmailAndPassword(email, password).then(function(){
+      window.location.href = "./index.html";
+    });
+   // window.location.href = "./index.html";
 
    // function(errorObject) {
    //  console.log("Errors handled: " + errorObject.code);
@@ -238,7 +236,7 @@ function initMap(locations) {
       infoWindowContent.push(
       '<div class="info_content">' +
       '<h3>' + locationName + '</h3>' +
-      '<h4>' + response.results[0].formatted_address + '</h4>' +
+      '<h5>' + response.results[0].formatted_address + '</h5>' +
       '<p>' + locationDescription + '</p>' + '</div>');
     });
 
