@@ -255,3 +255,31 @@ function initMap(locations) {
     google.maps.event.removeListener(boundsListener);
   });
 }
+
+
+// VUE
+var beerlist = new Vue({
+  el: '#beerlist',
+  data: {
+    beers: [
+
+    ]
+  }
+})
+
+Vue.component('beer-item', {
+  props: ['beer'],
+  methods: {
+    toggle: function () {
+      this.show = !this.show
+    }
+  },
+  data: function () {
+    return { show: false }
+  },
+  template: '<div>' +
+    '<li v-on:click="toggle"> {{ beer.name }}</li>' +
+    '<p v-show="show"> {{ beer.description }} </p>' +
+    '</div>'
+})
+
