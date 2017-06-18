@@ -152,7 +152,7 @@ function queryAPIBy(options, callback) {
   var options = Object.assign(defaults, options)
 
   if (options.zip) {
-    var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
+    var url = '/locations/?key=140c95583b73943351e5001025e8a88a'
     var params = {
       postalCode: options.zip
     }
@@ -160,7 +160,7 @@ function queryAPIBy(options, callback) {
   }
 
   if (options.brewery) {
-    var url = '/search/?key=ef6233841a88d451b69d43089bd4b81a'
+    var url = '/search/?key=140c95583b73943351e5001025e8a88a'
     var params = {
       q: options.brewery,
       type: 'beer'
@@ -169,7 +169,7 @@ function queryAPIBy(options, callback) {
   }
 
   if (options.city && options.state) {
-    var url = '/locations/?key=ef6233841a88d451b69d43089bd4b81a'
+    var url = '/locations/?key=140c95583b73943351e5001025e8a88a'
     var params = {
       locality: options.city,
       region: options.state
@@ -227,26 +227,29 @@ function initMap(locations) {
   // Display multiple markers on a map
   var infoWindow = new google.maps.InfoWindow(), marker, i;
   var infoWindowContent = [];
+  var locationName = [];
 
   // Loop through our array of markers & place each one on the map
   for( i = 0; i < locations.length; i++ ) {
     var queryURL = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + locations[i].lat + ","
     + locations[i].lon + "&sensor=true" ;
     var locationName = locations[i].name;
-    var locationDescription = locations[i].description
+    var locationDescription = locations[i].description;
+    (function(thisName, thisDescription){
+      $.ajax({
+        url: queryURL,
+        method: "GET"
+      }).done(function(response) {
 
+        infoWindowContent.push(
+        '<div class="info_content">' +
+        '<h3>' + thisName + " " + "%RATING%/5" + '</h3>' +
+        '<h5>' + response.results[0].formatted_address + '</h5>' +
+        '<p>' + thisDescription + '</p>' + '</div>');
+      });      
+    }(locationName, locationDescription))
         // Creates AJAX call convert geocode to real address
-    $.ajax({
-      url: queryURL,
-      method: "GET"
-    }).done(function(response) {
 
-      infoWindowContent.push(
-      '<div class="info_content">' +
-      '<h3>' + locationName + " " + "%RATING%/5" + '</h3>' +
-      '<h5>' + response.results[0].formatted_address + '</h5>' +
-      '<p>' + locationDescription + '</p>' + '</div>');
-    });
 
     var position = new google.maps.LatLng(locations[i].lat, locations[i].lon);
     bounds.extend(position);
