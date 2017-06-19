@@ -184,7 +184,7 @@ function queryAPIBy(options, callback) {
   axios.get(url, {
     // we use cors-anywhere here to get around same origin restriction that
     // breweryDB has on their API
-    baseURL: 'https://cors-anywhere.herokuapp.com/http://api.brewerydb.com/v2',
+    baseURL: 'https://cors-anywhere.herokuapp.com/https://api.brewerydb.com/v2',
     params : params
   })
     .then(function (res) {
@@ -232,7 +232,7 @@ function initMap(locations) {
 
   // Loop through our array of markers & place each one on the map
   for( i = 0; i < locations.length; i++ ) {
-    var queryURL = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + locations[i].lat + ","
+    var queryURL = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + locations[i].lat + ","
         + locations[i].lon + "&sensor=true" ;
     var locationName = locations[i].name;
     var locationDescription = locations[i].description;
@@ -240,10 +240,12 @@ function initMap(locations) {
       $.ajax({
         url: queryURL,
         method: "GET"
-      }).done(function(response) {        infoWindowContent.push(
+      }).done(function(response) {
+        address = response.results[0].formatted_address || "Cannot find address."
+        infoWindowContent.push(
         '<div class="info_content">' +
           '<h3>' + thisName + " " + "%RATING%/5" + '</h3>' +
-          '<h5>' + response.results[0].formatted_address + '</h5>' +
+          '<h5>' + address + '</h5>' +
           '<p>' + thisDescription + '</p>' + '</div>');
                                  });
     }(locationName, locationDescription))
@@ -280,8 +282,7 @@ function initMap(locations) {
           if (isNaN(rating)) {
             var rating = '?'
           }
-          var newText = infoWindowContent[i].replace(/%RATING%/, rating)
-          infoWindow.setContent(newText);
+          infoWindow.setContent(infoWindowContent[i].replace(/%RATING%/, rating));
         })
       }
     })(marker, i));
