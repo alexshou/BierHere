@@ -232,7 +232,7 @@ function initMap(locations) {
 
   // Loop through our array of markers & place each one on the map
   for( i = 0; i < locations.length; i++ ) {
-    var queryURL = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + locations[i].lat + ","
+    var queryURL = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + locations[i].lat + ","
         + locations[i].lon + "&sensor=true" ;
     var locationName = locations[i].name;
     var locationDescription = locations[i].description;
