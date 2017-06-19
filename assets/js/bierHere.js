@@ -1,12 +1,12 @@
 // Initialize Firebase
 var config = {
-   apiKey: "AIzaSyDvb4GGuWEBtXj2HkuNi2rwPtsw-rR6NO8",
-   authDomain: "practiceuserauthentication.firebaseapp.com",
-   databaseURL: "https://practiceuserauthentication.firebaseio.com",
-   projectId: "practiceuserauthentication",
-   storageBucket: "practiceuserauthentication.appspot.com",
-   messagingSenderId: "333032893466"
- };
+  apiKey: "AIzaSyDvb4GGuWEBtXj2HkuNi2rwPtsw-rR6NO8",
+  authDomain: "practiceuserauthentication.firebaseapp.com",
+  databaseURL: "https://practiceuserauthentication.firebaseio.com",
+  projectId: "practiceuserauthentication",
+  storageBucket: "practiceuserauthentication.appspot.com",
+  messagingSenderId: "333032893466"
+};
 
 firebase.initializeApp(config);
 
@@ -40,7 +40,7 @@ $("#submit-button").on("click", function(event) {
 
 $(".sign-up-link").on("click", function(event) {
   console.log("sign up form clicked");
- // $("#sign-up-form").show();
+  // $("#sign-up-form").show();
 
 });
 
@@ -58,13 +58,13 @@ $("#signup-button").on("click", function(event) {
 
   if (atpos<1 || dotpos<atpos+2 || dotpos+2>=email.length) {
     $("#email-validate-status").html("Not A Valid Email Address")
-      return false;
-}
+    return false;
+  }
 
- if (password.length < 6) {
-  $("#validate-status").html("Password Must Be At Least 6 Characters In Length");
-  return false;
- }
+  if (password.length < 6) {
+    $("#validate-status").html("Password Must Be At Least 6 Characters In Length");
+    return false;
+  }
 
   if ( password == confirmPassword) {
 
@@ -73,10 +73,10 @@ $("#signup-button").on("click", function(event) {
     auth.createUserWithEmailAndPassword(email, password).then(function(){
       window.location.href = "./index.html";
     });
-   // window.location.href = "./index.html";
+    // window.location.href = "./index.html";
 
-   // function(errorObject) {
-   //  console.log("Errors handled: " + errorObject.code);
+    // function(errorObject) {
+    //  console.log("Errors handled: " + errorObject.code);
 
     // };
   } else {
@@ -100,7 +100,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     console.log("not logged in");
     //To Do: hide logout button
     $(".log-out").hide();
-   $(".navbar-text").html("Already have an account?");
+    $(".navbar-text").html("Already have an account?");
 
   }
 
@@ -233,7 +233,7 @@ function initMap(locations) {
   // Loop through our array of markers & place each one on the map
   for( i = 0; i < locations.length; i++ ) {
     var queryURL = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + locations[i].lat + ","
-        + locations[i].lon + "&sensor=true" ;
+      + locations[i].lon + "&sensor=true" ;
     var locationName = locations[i].name;
     var locationDescription = locations[i].description;
     (function(thisName, thisDescription){
@@ -243,11 +243,11 @@ function initMap(locations) {
       }).done(function(response) {
         address = response.results[0].formatted_address || "Cannot find address."
         infoWindowContent.push(
-        '<div class="info_content">' +
-          '<h3>' + thisName + " " + "%RATING%/5" + '</h3>' +
-          '<h5>' + address + '</h5>' +
-          '<p>' + thisDescription + '</p>' + '</div>');
-                                 });
+          '<div class="info_content">' +
+            '<h3>' + thisName + " " + "%RATING%/5" + '</h3>' +
+            '<h5>' + address + '</h5>' +
+            '<p>' + thisDescription + '</p>' + '</div>');
+      });
     }(locationName, locationDescription))
 
     var position = new google.maps.LatLng(locations[i].lat, locations[i].lon);
