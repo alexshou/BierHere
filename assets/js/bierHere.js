@@ -80,7 +80,7 @@ $("#signup-button").on("click", function(event) {
 
     // };
   } else {
-    console.log("passwords dont match");
+    console.log("passwords don't match");
     //var passwordError = $("<p>").html("Passwords Don't Match")
     $("#validate-status").html("Passwords Don't Match");
   }
@@ -196,7 +196,7 @@ function queryAPIBy(options, callback) {
   function collectLocations (brewery) {
     returnData.push({
       name: brewery.brewery.name,
-      description : brewery.brewery.description,
+      description : brewery.brewery.description || "No description available",
       lat: brewery.latitude,
       lon: brewery.longitude,
     })
