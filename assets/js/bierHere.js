@@ -151,7 +151,7 @@ function queryAPIBy(options, callback) {
 
   var options = Object.assign(defaults, options)
 
-  var key = '140c95583b73943351e5001025e8a88a'
+  var key = 'ef6233841a88d451b69d43089bd4b81a'
 
   if (options.zip) {
     var url = '/locations/?key=' + key
@@ -268,6 +268,7 @@ function initMap(locations) {
         // on click we get the beers from the brewery
         var brewery = locations[i].name
         queryAPIBy({brewery: brewery}, function (beers) {
+          ratingHolder.name = brewery
           // clear it out
           beerlist.beers = []
           beers.forEach(function (beer) {
@@ -348,4 +349,22 @@ Vue.component('beer-item', {
     '<li v-on:click="toggle" class="beertitle"> {{ beer.name }}</li>' +
     '<p v-show="show" class="beer"> {{ beer.description }} </p>' +
     '</div>'
+})
+
+
+Vue.component('rating-box', {
+  props: ['name', 'number'],
+  methods: {
+    sendRating: function () {
+      addRating(this.name, this.number)
+    }
+  },
+  template: '<button class="btn btn-default" v-on:click="sendRating()" v-show="name"> {{ this.number }} </button>'
+})
+
+var ratingHolder = new Vue({
+  el: '#rating',
+  data: {
+    name: undefined,
+  }
 })

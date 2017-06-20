@@ -134,6 +134,16 @@
             <div class="panel-heading">
               <h3 class="panel-title"><span class="glyphicon glyphicon-th-list"></span> Search Results</h3>
             </div>
+            <div class="panel-body" id="rating">
+              <div>
+                <rating-box
+                  v-for="number in 5"
+                  v-bind:name="name"
+                  v-bind:number="number"
+                  v-bind:key="number.id">
+                </rating-box>
+              </div>
+            </div>
             <div class="panel-body" id="beerlist">
               <ul class="list-group">
                 <beer-item
