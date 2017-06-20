@@ -62,14 +62,14 @@ $("#signup-button").on("click", function(event) {
   }
 
   if (password.length < 6) {
-    $("#validate-status").html("Password Must Be At Least 6 Characters In Length");
+    $("#validate-status").empty().html("Password Must Be At Least 6 Characters In Length");
     return false;
   }
 
   if ( password == confirmPassword) {
 
 
-    $("#validate-status").append("Passwords Match, Your Account Has Been Created");
+    $("#validate-status").empty().html("Passwords Match, Your Account Has Been Created");
     auth.createUserWithEmailAndPassword(email, password).then(function(){
       window.location.href = "./index.html";
     });
@@ -82,7 +82,7 @@ $("#signup-button").on("click", function(event) {
   } else {
     console.log("passwords dont match");
     //var passwordError = $("<p>").html("Passwords Don't Match")
-    $("#validate-status").html("Passwords Don't Match");
+    $("#validate-status").empty().html("Passwords Don't Match");
   }
 
 });
