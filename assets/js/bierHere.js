@@ -299,6 +299,9 @@ function initMap(locations) {
 }
 
 function getRating(name, callback) {
+  // firebase cannot have # $ [ or ] in it
+  // this regex looks for a period, hash, dollar, left of right bracket
+  // and "replaces" them with nothing, so it deletes them
   var name = name.replace(/\.|#|$|\[|\]/g, "")
   var ratings = []
   firebase.database().ref(name).once('value')
@@ -342,7 +345,7 @@ Vue.component('beer-item', {
     return { show: false }
   },
   template: '<div>' +
-    '<li v-on:click="toggle"> {{ beer.name }}</li>' +
+    '<li v-on:click="toggle" class="beertitle"> {{ beer.name }}</li>' +
     '<p v-show="show" class="beer"> {{ beer.description }} </p>' +
     '</div>'
 })
