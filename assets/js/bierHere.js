@@ -264,6 +264,7 @@ function initMap(locations) {
         // infoWindow.setContent(infoWindowContent[i][0]);
         infoWindow.setContent(infoWindowContent[i]);
         infoWindow.open(map, marker);
+        infoWindow.close
 
         // on click we get the beers from the brewery
         var brewery = locations[i].name
@@ -287,6 +288,12 @@ function initMap(locations) {
         })
       }
     })(marker, i));
+
+    google.maps.event.addListener(infoWindow, 'closeclick', function () {
+      // this fires the same amount of times as there are markers on the map...
+      beerlist.beers = []
+      ratingHolder.name = false
+    })
 
     // Automatically center the map fitting all markers on the screen
     map.fitBounds(bounds);
@@ -365,6 +372,6 @@ Vue.component('rating-box', {
 var ratingHolder = new Vue({
   el: '#rating',
   data: {
-    name: undefined,
+    name: false,
   }
 })
