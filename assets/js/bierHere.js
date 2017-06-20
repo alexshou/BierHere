@@ -348,4 +348,6 @@ Vue.component('beer-item', {
     '<li v-on:click="toggle" class="beertitle"> {{ beer.name }}</li>' +
     '<p v-show="show" class="beer"> {{ beer.description }} </p>' +
     '</div>'
+
+    //ben's test comment
 })
